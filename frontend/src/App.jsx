@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './Pages/Home.jsx'
 import SignUp from './Pages/signUp.jsx'
 import SignIn from './Pages/signIn.jsx'
+import { Shorts } from './Pages/Shorts/Shorts.jsx'
 import { useNavigate } from "react-router-dom";
 
 function App() {
@@ -12,7 +13,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home/>}/>
+        <Route path="/" element={<Home navigate={navigate} />}>
+          <Route path="/shorts" element={<Shorts />} />
+        </Route>
         <Route path="/signup" element={<SignUp navigate={navigate}/>}/>
         <Route path="/signin" element={<SignIn navigate={navigate}/>}/>
     </Routes>
