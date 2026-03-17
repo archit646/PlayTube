@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from 'axios'
 
-export default function SignUp({navigate}) {
+export default function SignUp({ navigate }) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -57,14 +57,14 @@ export default function SignUp({navigate}) {
 
         if (Object.keys(validationErrors).length !== 0) return;
 
-        const formData = {
-            userName:username,
-            email,
-            password,
-            photoUrl: logo,
-        };
+        const formData = new FormData();
+
+        formData.append("userName", username);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("photoUrl", logo);
         try {
-            const result = await axios.post("http://localhost:8000/api/auth/signup", formData,{withCredentials: true})
+            const result = await axios.post("http://localhost:8000/api/auth/signup", formData, { withCredentials: true })
             console.log(result)
             navigate('/')
 
@@ -178,7 +178,7 @@ export default function SignUp({navigate}) {
                     type="submit" disabled={loading}
                     className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
                 >
-                    {loading?"Signing Up":"Sign Up"}
+                    {loading ? "Signing Up" : "Sign Up"}
                 </button>
             </form>
         </div>

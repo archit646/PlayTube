@@ -5,10 +5,13 @@ import genToken from '../config/token.js'
 import uploadOnCloudinary from '../config/cloudinary.js'
 export const signUp = async (req, res) => {
     const { userName, email, password } = req.body
+    console.log(req.file)
     try {
         let photoUrl
         if (req.file) {
-            photoUrl = await uploadOnCloudinary(req.file.path)
+            const result = await uploadOnCloudinary(req.file.path)
+            photoUrl = result.secure_url;
+
         }
         const existUser = await User.findOne({ email })
         if (existUser) {
@@ -33,7 +36,7 @@ export const signUp = async (req, res) => {
             secure: false,
             sameSite: "lax"
         })
-        return res.status(201).json({ message: "User Created Successfully"})
+        return res.status(201).json({ message: "User Created Successfully",user})
     }
     catch (error) {
         console.log("User Creation Failed", error)
@@ -57,7 +60,7 @@ export const signIn = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: false,
-            sameSite: "Strict"
+            sameSite: "lax"
         })
         return res.status(201).json({ message: "Login Successfully", user })
     }
