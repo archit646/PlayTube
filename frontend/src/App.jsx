@@ -5,10 +5,12 @@ import SignUp from './Pages/signUp.jsx'
 import SignIn from './Pages/signIn.jsx'
 import { Shorts } from './Pages/Shorts/Shorts.jsx'
 import { useNavigate } from "react-router-dom";
+import useGetCurrentUser from './customHooks/getCurrentUser.jsx'
 
 function App() {
   const navigate=useNavigate()
   const [count, setCount] = useState(0)
+  useGetCurrentUser()
 
   return (
     <>

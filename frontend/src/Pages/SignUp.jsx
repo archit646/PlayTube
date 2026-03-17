@@ -58,13 +58,13 @@ export default function SignUp({navigate}) {
         if (Object.keys(validationErrors).length !== 0) return;
 
         const formData = {
-            username,
+            userName:username,
             email,
             password,
             photoUrl: logo,
         };
         try {
-            const result = await axios.post("http://localhost:8000/api/auth/signup", formData)
+            const result = await axios.post("http://localhost:8000/api/auth/signup", formData,{withCredentials: true})
             console.log(result)
             navigate('/')
 

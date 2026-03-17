@@ -40,7 +40,7 @@ export default function Login({navigate}) {
             password
         };
         try {
-            const result = await axios.post("http://localhost:8000/api/auth/signin", formData).then((res) => {
+            const result = await axios.post("http://localhost:8000/api/auth/signin", formData,{withCredentials: true}).then((res) => {
                 console.log(res.data)
                 setLoading(false);
             })

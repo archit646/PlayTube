@@ -21,17 +21,17 @@ export const signUp = async (req, res) => {
             return res.status(400).json({ message: "Password is too short" })
         }
         const hashPassword = await bcrypt.hash(password, 10)
-        const user = User.create({
+        const user = await User.create({
             userName,
             email,
             password: hashPassword,
             photoUrl
         })
-        const token = genToken(user._id)
+        const token = await genToken(user._id)
         res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "Strict"
+            httpOnly:true,
+            secure: false,
+            sameSite: "lax"
         })
         return res.status(201).json({ message: "User Created Successfully"})
     }
@@ -53,10 +53,10 @@ export const signIn = async (req, res) => {
             return res.status(400).json({ message: "Incorrect Password" })
         
         }
-        const token = genToken(user._id)
+        const token =await genToken(user._id)
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: "Strict"
         })
         return res.status(201).json({ message: "Login Successfully", user })
