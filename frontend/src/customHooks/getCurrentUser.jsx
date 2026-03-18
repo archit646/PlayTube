@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { setUserData } from "../redux/userSlice";
+import { setUserData } from "../redux/userSlice.js";
 
 const useGetCurrentUser = () => {
     console.log("Hook Called")
@@ -24,6 +24,7 @@ const useGetCurrentUser = () => {
         };
 
         fetchUser();
+
     }, [dispatch]);
 };
 

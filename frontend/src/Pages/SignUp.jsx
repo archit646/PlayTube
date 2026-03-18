@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { setUserData } from "../redux/userSlice";
 
 export default function SignUp({ navigate }) {
     const [username, setUsername] = useState("");
@@ -11,6 +13,7 @@ export default function SignUp({ navigate }) {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const handleLogoChange = (e) => {
         const file = e.target.files[0];
@@ -65,11 +68,16 @@ export default function SignUp({ navigate }) {
         formData.append("photoUrl", logo);
         try {
             const result = await axios.post("http://localhost:8000/api/auth/signup", formData, { withCredentials: true })
-            console.log(result)
-            navigate('/')
+       const userRes = await axios.get(
+            "http://localhost:8000/api/users/me",
+            { withCredentials: true }
+        );
 
+        // ✅ redux update
+        dispatch(setUserData(userRes.data));
 
-            // console.log(formData);
+        // ✅ navigate
+        navigate("/signin");
         }
         catch (error) {
             console.log(error)

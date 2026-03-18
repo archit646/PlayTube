@@ -13,14 +13,19 @@ import { GoVideo } from "react-icons/go";
 import { FaThumbsUp } from "react-icons/fa";
 import { FaGreaterThan } from "react-icons/fa6";
 import { IoIosAddCircle } from "react-icons/io";
-
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux'
+import Profile from '../components/profile.jsx'
 
-function Home({navigate}) {
+
+
+function Home({ navigate }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [selectedItem, setSelectedItem] = useState('Home')
   const [active, setActive] = useState("Home")
+  const [showProfile, setShowProfile] = useState(false)
+  const { userData } = useSelector((state) => state.user)
   const categories = ["Music", "Gaming", "Movies", "Tv Shows", "News", "Trending",
     "Entertainment", "Education", "Science & Tech", "Travel", "Fashion", "Cooking", "Sports", "Pets", "Art", "Comedy", "Vlogs"]
   return (
@@ -59,12 +64,12 @@ function Home({navigate}) {
 
         {/* right */}
         <div className='flex items-center gap-3'>
-          <button className='hidden md:flex items-center gap-1 cursor-pointer bg-[#272727] px-3 py-1 rounded-full'>
+          {userData?.channel && <button className='hidden md:flex items-center gap-1 cursor-pointer bg-[#272727] px-3 py-1 rounded-full'>
             <span className='text-lg'>+</span>
             <span>Create</span>
-          </button>
+          </button>}
 
-          <FaUserCircle className='text-3xl text-gray-400 hidden md:flex' />
+          {userData?.photoUrl ? <button onClick={()=>setShowProfile(!showProfile)}><img className='w-8 h-8 cursor-pointer rounded-full border-2 hidden md:block border-white' src={userData?.photoUrl} alt='user'></img></button> : <button onClick={()=>setShowProfile(!showProfile)}><FaUserCircle className='text-3xl cursor-pointer text-gray-400 hidden md:flex' /></button>}
           <CiSearch className='text-lg md:hidden flex' />
         </div>
 
@@ -113,9 +118,10 @@ function Home({navigate}) {
           ))}
         </div>
         <div className='mt-2'>
-          <Outlet/>
+          <Outlet />
 
         </div>
+        <Profile showProfile={showProfile} setShowProfile={setShowProfile} />
       </main>
       {/* Bottom Nav */}
       <nav className='md:hidden fixed bottom-0 left-0 right-0 bg-[#0f0f0f] border-t border-gray-800 flex justify-around py-2 z-10'>
@@ -123,7 +129,7 @@ function Home({navigate}) {
         <MobileSizeNav icon={<SiYoutubeshorts />} text={"Shorts"} active={active === "Shorts"} onClick={() => setActive("Shorts")} />
         <MobileSizeNav icon={<IoIosAddCircle />} text={"Create"} active={active === "+"} onClick={() => setActive("+")} />
         <MobileSizeNav icon={<MdOutlineSubscriptions />} text={"Subscriptions"} active={active === "Subscriptions"} onClick={() => setActive("Subscriptions")} />
-        <MobileSizeNav icon={<FaRegUserCircle />} text={"You"} active={active === "You"} onClick={() => setActive("You")} />
+        <MobileSizeNav icon={userData?.photoUrl ? <img className='w-8 h-8 rounded-full border-2 border-white' src={userData?.photoUrl}></img> : <FaRegUserCircle />} text={"You"} active={active === "You"} onClick={() => setActive("You")} />
       </nav>
 
     </div>

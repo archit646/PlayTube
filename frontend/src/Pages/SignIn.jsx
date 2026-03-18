@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 export default function Login({navigate}) {
 
@@ -9,6 +10,9 @@ export default function Login({navigate}) {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
+
 
     const validate = () => {
         const newErrors = {};
@@ -40,12 +44,20 @@ export default function Login({navigate}) {
             password
         };
         try {
-            const result = await axios.post("http://localhost:8000/api/auth/signin", formData,{withCredentials: true}).then((res) => {
-                console.log(res.data)
-                setLoading(false);
-            })
-            // console.log(result);
-            navigate('/')
+            const result = await axios.post("http://localhost:8000/api/auth/signin", formData,{withCredentials: true})
+                
+                
+             const userRes = await axios.get(
+            "http://localhost:8000/api/users/me",
+            { withCredentials: true }
+        );
+
+        // ✅ redux update
+        dispatch(setUserData(userRes.data));
+
+        // ✅ navigate
+        navigate("/");
+            
 
         }
         catch (error) {
